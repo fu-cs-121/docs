@@ -1,4 +1,6 @@
-# Study Guide: Essential Concepts for Processing Text Data in Python
+# Unit 2 Study Guide: File I/O, Lists, Dictionaries, and Functions
+
+_The most up-to-date version of this guide is available at the following url: bit.ly/cs121-unit2-guide_
 
 This guide covers fundamental programming concepts necessary for processing and analyzing text data using Python. It is designed to help you read data from files, manipulate and analyze that data, and write updated data back to files—all without relying on external libraries.
 
@@ -362,7 +364,3 @@ else:
 ```
 
 ---
-
-## Conclusion
-
-By understanding and applying these concepts, you can effectively process and analyze text data using Python. Practice by working through the exercise provided and experimenting with different data sets and adjustment factors. These foundational skills are essential for any data processing tasks you may encounter.

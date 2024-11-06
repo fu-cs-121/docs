@@ -1,7 +1,10 @@
 # CS-121: Reference Documentation
 
-## Table of Contents
+## Unit Study Guides
 
-_Note: This is a WIP (work in progress) document. More resources will be added in the future_
-
+- [Unit 1: Study Guide](./unit-1/study-guide.md)
 - [Unit 2: Study Guide](./unit-2/study-guide.md)
+
+## Project Guides
+
+- [OmniCo Codex](./projects/omnico-codex.md)
