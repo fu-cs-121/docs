@@ -261,6 +261,22 @@ total_score = calculate_total(scores)
 print(total_score)  # 270
 ```
 
+### Returning Multiple Values
+
+You can return multiple values from a function by separating them with commas.
+
+```python
+def calculate_stats(data):
+    total = sum(data)
+    average = total / len(data)
+    return total, average
+
+scores = [90, 85, 95]
+total_score, avg_score = calculate_stats(scores)
+print(total_score, avg_score)  # 270 90.0
+
+```
+
 ### Example: Refactoring Code into a Function
 
 Suppose you have code that reads data from a file and processes it at the root level.
