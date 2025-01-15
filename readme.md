@@ -8,8 +8,6 @@
 
 # Tutorials/Help
 
-- [Markdown Tutorial](https://www.markdowntutorial.com/)
-
 # Code Tools
 
 [https://code.visualstudio.com/](https://code.visualstudio.com/)
@@ -22,14 +20,5 @@
 
 ## General Resources
 
-- [Source Control with VSCode](./resources/source-control.md)
-
-## Unit Study Guides
-
-- [Unit 1: Study Guide](./unit-1/study-guide.md)
-- [Unit 2: Study Guide](./unit-2/study-guide.md)
-- [Unit 3 (Final Exam): Study Guide](./unit-3/study-guide.md)
-
-## Project Guides
-
-- [OmniCo Codex](./projects/omnico-codex.md)
+- [Sync Issue Troubleshooting](./resources/sync-issue.md)
+- [Git/Github Overview](./resources/source-control.md)
