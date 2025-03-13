@@ -10,6 +10,8 @@ Welcome to the **OmniCodex**, your comprehensive guide to mastering the fundamen
    - [Reading Files](#reading-files)
    - [Skipping Header Rows](#skipping-header-rows)
    - [Reading and Processing CSV Files](#reading-and-processing-csv-files)
+   - [Using the CSV Module](#using-the-csv-module)
+     - [Using the `csv.DictReader` Class](#using-the-csvdictreader-class)
    - [Reading Text Files into Lists](#reading-text-files-into-lists)
    - [Writing Files](#writing-files)
    - [Writing CSV Files](#writing-csv-files)
@@ -127,6 +129,58 @@ ID: E003, Name: Charlie Lee, Department: Marketing, Salary: 68000
   - `fields = line.split(',')` splits the line into a list of values.
   - `fields[0]` accesses the first element in the list (EmployeeID).
   - `fields[1:]` accesses elements from index 1 to the end (Name, Department, Salary).
+
+### Using the CSV Module
+
+For more complex CSV files, consider using Python's built-in `csv` module for reading and writing CSV files.
+
+**Example: Using the `csv` module**
+
+```python
+import csv
+
+# Open the CSV file
+with open('employees.csv', 'r') as file:
+    # Create a CSV reader
+    reader = csv.reader(file)
+    # Skip the header row
+    next(reader)
+    # Process each row
+    for row in reader:
+        employee_id, name, department, salary = row
+        print(f"ID: {employee_id}, Name: {name}, Department: {department}, Salary: {salary}")
+```
+
+- **Explanation:**
+  - `csv.reader(file)` creates a reader object that can iterate over lines in the CSV file.
+  - `next(reader)` skips the header row.
+  - Each `row` is a list of values from a line in the CSV file.
+
+#### Using the `csv.DictReader` Class
+
+The `csv.DictReader` class allows you to read CSV files into dictionaries, using the header row as keys.
+
+**Example: Using `csv.DictReader`**
+
+```python
+import csv
+
+# Open the CSV file
+with open('employees.csv', 'r') as file:
+    # Create a DictReader object
+    reader = csv.DictReader(file)
+    # Process each row as a dictionary
+    for row in reader:
+        employee_id = row['EmployeeID']
+        name = row['Name']
+        department = row['Department']
+        salary = row['Salary']
+        print(f"ID: {employee_id}, Name: {name}, Department: {department}, Salary: {salary}")
+```
+
+- **Explanation:**
+  - `csv.DictReader(file)` creates a reader object that interprets each row as a dictionary.
+  - You can access values using the column names as keys.
 
 ### Reading Text Files into Lists
 
