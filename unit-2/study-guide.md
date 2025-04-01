@@ -1,32 +1,29 @@
-# Unit 2 Study Guide: File I/O, CSV Handling, Data Structures, and Functions
+# Unit 2 Study Guide: File I/O, Data Structures, and Functions
 
 _The most up-to-date version of this guide is available at: bit.ly/cs121-unit2-guide_
 
-This guide covers fundamental programming techniques for reading, processing, and analyzing CSV data in Python. You will learn how to work with files, manage data with lists and dictionaries, perform calculations, and write updated information back to files—all through reusable functions that return values you can work with.
+This guide covers essential programming techniques for reading and processing data stored in files. You’ll learn how to work with files, manage data with lists and dictionaries, perform calculations, adjust values, and write updated information back to files—all by writing your own functions.
 
 ---
 
 ## Table of Contents
 
-1. Reading Data from Files and CSVs
-2. Working with Lists and Dictionaries
-3. Parsing and Converting Data
-4. Loading CSV Data Using the csv Module
-5. Performing Calculations on Data
-6. Adjusting Data Values
-7. Writing Data to Files and CSVs
-8. Defining and Using Functions  
-     8.1. Functions for Data Loading  
-     8.2. Functions for Data Processing
-9. Formatting Output and Additional Tips
+1. [Reading Data from Files](#reading-data-from-files)
+2. [Working with Lists and Dictionaries](#working-with-lists-and-dictionaries)
+3. [Parsing and Converting Data](#parsing-and-converting-data)
+4. [Defining and Using Functions](#defining-and-using-functions)
+5. [Performing Calculations on Data](#performing-calculations-on-data)
+6. [Adjusting Data Values](#adjusting-data-values)
+7. [Writing Data to Files](#writing-data-to-files)
+8. [Formatting Output and Additional Tips](#formatting-output-and-additional-tips)
 
 ---
 
-## 1. Reading Data from Files and CSVs
+## 1. Reading Data from Files
 
-### Opening and Reading Files
+Use Python’s built-in `open()` function along with a `with` statement to read data safely.
 
-Use the `open()` function with a `with` statement to safely read data from files:
+**Example: Reading a File Line-by-Line**
 
 ```python
 with open('data.txt', 'r') as file:
@@ -34,13 +31,11 @@ with open('data.txt', 'r') as file:
         print(line.strip())
 ```
 
-### Skipping Headers
-
-If your file has a header row, skip it using `next()`:
+If your file contains a header, you can skip it with:
 
 ```python
 with open('data.txt', 'r') as file:
-    next(file)  # Skip header
+    next(file)  # Skip the header line
     for line in file:
         print(line.strip())
 ```
@@ -51,28 +46,28 @@ with open('data.txt', 'r') as file:
 
 ### Lists
 
-A list is an ordered collection of items:
+Lists store ordered collections of items. For example:
 
 ```python
-fruits = ['apple', 'banana', 'cherry']
+numbers = [1, 2, 3, 4, 5]
 ```
 
 ### Dictionaries
 
-A dictionary stores key-value pairs, which are useful for representing records:
+Dictionaries store key-value pairs and are ideal for representing records:
 
 ```python
-fruit_info = {'name': 'apple', 'quantity': 10, 'price': 0.5}
+record = {'label': 'Sample', 'count': 10, 'metric': 2.5}
 ```
 
 ### Combining Both
 
-Often you’ll work with a list of dictionaries to represent multiple rows of data:
+Often you will work with a list of dictionaries to represent multiple records:
 
 ```python
-inventory = [
-    {'name': 'apple', 'quantity': 10, 'price': 0.5},
-    {'name': 'banana', 'quantity': 15, 'price': 0.3}
+data = [
+    {'label': 'A', 'count': 5, 'metric': 1.2},
+    {'label': 'B', 'count': 8, 'metric': 3.4}
 ]
 ```
 
@@ -80,224 +75,128 @@ inventory = [
 
 ## 3. Parsing and Converting Data
 
-### Splitting and Cleaning Data
+When processing raw file data, split each line into parts and convert strings to the appropriate types.
 
-When reading from a plain text file, you may need to split a line into fields and remove extra whitespace:
-
-```python
-line = "apple,10,0.5\n"
-fields = line.strip().split(',')  # ['apple', '10', '0.5']
-```
-
-### Converting Data Types
-
-Convert string values to numbers for calculations:
+**Example: Splitting and Converting a Line**
 
 ```python
-quantity = int(fields[1])
-price = float(fields[2])
+line = "ItemX,20,4.75\n"
+parts = line.strip().split(',')  # ['ItemX', '20', '4.75']
+label = parts[0]
+count = int(parts[1])
+metric = float(parts[2])
 ```
 
 ---
 
-## 4. Loading CSV Data Using the csv Module
+## 4. Defining and Using Functions
 
-Python’s `csv` module makes it easy to work with CSV files. Using `DictReader` handles the header row and creates dictionaries for each row automatically.
+Encapsulating code into functions makes your programs modular and easier to test. Each function should take input parameters, process data, and return output values. For instance, you might write a function that reads a file and returns a list of records.
 
-### Example: Using csv.DictReader
+**Example: Loading Data from a File**
 
 ```python
-import csv
+def load_data(file_path):
+    """
+    Reads a file where each line contains three comma-separated values:
+    a label (string), a count (integer), and a metric (float).
+    Returns a list of dictionaries with keys: 'label', 'count', 'metric'.
+    """
+    records = []
+    with open(file_path, 'r') as file:
+        # Optionally skip the header if the file has one:
+        # next(file)
+        for line in file:
+            parts = line.strip().split(',')
+            record = {
+                'label': parts[0],
+                'count': int(parts[1]),
+                'metric': float(parts[2])
+            }
+            records.append(record)
+    return records
 
-with open('data.csv', 'r', newline='') as csvfile:
-    reader = csv.DictReader(csvfile)
-    data_list = []
-    for row in reader:
-        # Convert string values to appropriate data types
-        row['quantity'] = int(row['quantity'])
-        row['price'] = float(row['price'])
-        data_list.append(row)
-
-print("Data loaded:", data_list)
+# Example usage:
+data_records = load_data('data.txt')
+print(f"Loaded {len(data_records)} records.")
 ```
-
-_Key Concepts:_
-
-- **Automatic Header Handling:** Each row becomes a dictionary with keys matching the header.
-- **Data Conversion:** Converting strings to numeric types ensures data is ready for calculations.
 
 ---
 
 ## 5. Performing Calculations on Data
 
-### Calculating Totals and Averages
+Once you have loaded your data into a list of dictionaries, you can perform calculations such as totals and averages.
 
-For a list of dictionaries, calculate totals by looping through each item:
+**Example: Calculating Total Value and Average Metric**
 
 ```python
-total_value = 0
-total_quantity = 0
-for item in data_list:
-    total_value += item['quantity'] * item['price']
-    total_quantity += item['quantity']
+def compute_summary(records):
+    total_value = 0
+    total_count = 0
+    for rec in records:
+        total_value += rec['count'] * rec['metric']
+        total_count += rec['count']
+    average_metric = total_value / total_count if total_count != 0 else 0
+    return total_value, average_metric
 
-if total_quantity != 0:
-    average_price = total_value / total_quantity
-else:
-    average_price = 0
-
-print("Total value:", total_value)
-print("Average price:", average_price)
+# Example usage:
+total, average = compute_summary(data_records)
+print(f"Total value: {total:.2f}")
+print(f"Average metric: {average:.2f}")
 ```
-
-_Concepts Covered:_
-
-- **Multiplying Values:** Multiply quantity by price for each record.
-- **Looping:** Use a standard `for` loop to process data.
-- **Conditional Checks:** Prevent division by zero when calculating averages.
 
 ---
 
 ## 6. Adjusting Data Values
 
-To modify numerical values across your data records—such as adjusting prices for inflation—use a loop to update each item.
+You may need to update each record in your data (for example, to apply a discount or adjustment factor).
 
-### Example: Adjusting Prices by a Fixed Rate
+**Example: Applying an Adjustment Factor**
 
 ```python
-inflation_rate = 1.10  # Represents a 10% increase
-for item in data_list:
-    item['price'] = item['price'] * inflation_rate
+def adjust_values(records, adjustment_factor):
+    """
+    Adjusts the 'metric' of each record by multiplying it with an adjustment factor.
+    The factor should be less than 1 for a reduction (e.g., 0.8 for a 20% discount).
+    """
+    for rec in records:
+        rec['metric'] *= adjustment_factor
+    return records
 
-print("Adjusted data:", data_list)
+# Example usage:
+adjusted_records = adjust_values(data_records, 0.8)
 ```
-
-_Concepts Covered:_
-
-- **Iterating Over Dictionaries:** Modify each record using a loop.
-- **Arithmetic Operations:** Apply multiplication to adjust values.
 
 ---
 
-## 7. Writing Data to Files and CSVs
+## 7. Writing Data to Files
 
-### Writing to a Text File
+After processing or adjusting data, you may want to write the results back to a file.
 
-Write output line by line:
+**Example: Writing Data to a Text File**
 
 ```python
-with open('output.txt', 'w') as file:
-    for item in data_list:
-        line = f"{item['name']},{item['quantity']},{item['price']:.2f}\n"
+with open('updated_data.txt', 'w') as file:
+    for rec in data_records:
+        # Format each record as a comma-separated line.
+        line = f"{rec['label']},{rec['count']},{rec['metric']:.2f}\n"
         file.write(line)
 ```
 
-### Writing to a CSV File Using csv.DictWriter
-
-```python
-import csv
-
-with open('updated_data.csv', 'w', newline='') as csvfile:
-    fieldnames = ['name', 'quantity', 'price']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
-    for item in data_list:
-        writer.writerow(item)
-```
-
-_Concepts Covered:_
-
-- **File Output:** Writing strings and formatted data to files.
-- **CSV Formatting:** Using `DictWriter` to create CSV rows from dictionaries automatically.
-
 ---
 
-## 8. Defining and Using Functions
+## 8. Formatting Output and Additional Tips
 
-Encapsulating repeated operations into functions makes your code organized and reusable. In the sections below, we provide examples of functions that load and process data, including how they return values and how you can use these returned values in your program.
+When displaying numerical results, use formatted strings to control the number of decimal places.
 
-### 8.1. Functions for Data Loading
-
-When loading data from a file or CSV, define a function that:
-
-- Accepts a filename as a parameter.
-- Opens the file, processes each line or row.
-- Returns a list of dictionaries (or any other data structure) that contains the processed data.
-
-**Example: Loading CSV Data**
+**Example: Formatting Output**
 
 ```python
-def load_csv_data(filename):
-    import csv
-    data_list = []
-    with open(filename, 'r', newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            # Convert data types as needed
-            row['quantity'] = int(row['quantity'])
-            row['price'] = float(row['price'])
-            data_list.append(row)
-    return data_list
-
-# Using the function:
-inventory = load_csv_data('data.csv')
-print("Inventory loaded:", inventory)
+print(f"Total value: ${total:.2f}")
+print(f"Average metric: {average:.2f}")
 ```
 
-_Explanation:_
+Additional tips:
 
-- The function `load_csv_data` encapsulates the CSV loading process.
-- It returns a list of dictionaries that can be used later for further processing.
-
-### 8.2. Functions for Data Processing
-
-Once data is loaded, you can define functions to process it. For example, you might want to calculate totals or averages.
-
-**Example: Calculating Totals and Averages**
-
-```python
-def calculate_totals(data):
-    total_value = 0
-    total_quantity = 0
-    for item in data:
-        total_value += item['quantity'] * item['price']
-        total_quantity += item['quantity']
-    if total_quantity != 0:
-        average_price = total_value / total_quantity
-    else:
-        average_price = 0
-    return total_value, average_price
-
-# Using the function:
-inventory_total, average_unit_price = calculate_totals(inventory)
-print(f"Total Inventory Value: ${inventory_total:.2f}")
-print(f"Average Price per Unit: ${average_unit_price:.2f}")
-```
-
-_Explanation:_
-
-- The function `calculate_totals` processes the data by iterating over each dictionary.
-- It calculates the total value and total quantity, then computes the average price.
-- Both values are returned as a tuple. When calling the function, you can unpack the returned values into separate variables.
-
-_Usage in a Program:_
-By combining these functions, you can create a program that first loads data from a file, processes it, and then uses the returned values for further actions such as displaying output or writing to another file.
-
----
-
-## 9. Formatting Output and Additional Tips
-
-### Formatting Numerical Output
-
-Use formatted strings (f-strings) to display numbers with a fixed number of decimal places:
-
-```python
-print(f"Total value: ${inventory_total:.2f}")
-print(f"Average price: ${average_unit_price:.2f}")
-```
-
-### Useful Functions
-
-- **len():** Get the number of records in a list.
-- **strip():** Remove unwanted whitespace from strings.
-- **join():** Concatenate list items into a single string when needed.
+- Use functions to keep your code modular.
+- Test each function independently before integrating them into your main program.
